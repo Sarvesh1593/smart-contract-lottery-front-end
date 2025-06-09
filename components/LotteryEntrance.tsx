@@ -1,7 +1,7 @@
 import { useWeb3Contract } from "react-moralis";
 import { abi, contractAddresses } from "../constants";
 import { useMoralis } from "react-moralis";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { formatUnits } from "ethers";
 import { useNotification } from "@web3uikit/core";
 //
@@ -57,7 +57,7 @@ export default function LotteryEntrance() {
     functionName: "getRecentWinner",
     params: {},
   });
-  async function updateUI() {
+  const updateUI = useCallback(async function () {
     try {
       const fee = await getEntranceFee();
       const numPlayersFromCall = await getNumberOfPlayers();
@@ -81,16 +81,17 @@ export default function LotteryEntrance() {
     } catch (error) {
       console.error("Error updating UI:", error);
     }
-  }
+  }, []);
+
   // console.log(raffleAddress);
   useEffect(() => {
     if (isWeb3Enabled) {
       updateUI();
     }
-  }, [isWeb3Enabled]);
+  }, [isWeb3Enabled, updateUI]);
 
-  const handleSuccess = async function (tx: any) {
-    await tx.wait(1);
+  const handleSuccess = async function () {
+    // await tx.wait(1);
     handleNotification();
     console.log("Handle Success is called");
     updateUI();
