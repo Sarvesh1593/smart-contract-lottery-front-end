@@ -57,31 +57,34 @@ export default function LotteryEntrance() {
     functionName: "getRecentWinner",
     params: {},
   });
-  const updateUI = useCallback(async function () {
-    try {
-      const fee = await getEntranceFee();
-      const numPlayersFromCall = await getNumberOfPlayers();
-      const recentWinnerFromCall = await getRecentWinner();
+  const updateUI = useCallback(
+    async function updateUI() {
+      try {
+        const fee = await getEntranceFee();
+        const numPlayersFromCall = await getNumberOfPlayers();
+        const recentWinnerFromCall = await getRecentWinner();
 
-      if (fee) {
-        setEntranceFee(fee.toString());
-      }
+        if (fee) {
+          setEntranceFee(fee.toString());
+        }
 
-      if (numPlayersFromCall !== undefined && numPlayersFromCall !== null) {
-        // Cast to string assuming it's a BigNumber or number
-        setnumOfPlayer(numPlayersFromCall.toString());
-      }
+        if (numPlayersFromCall !== undefined && numPlayersFromCall !== null) {
+          // Cast to string assuming it's a BigNumber or number
+          setnumOfPlayer(numPlayersFromCall.toString());
+        }
 
-      if (recentWinnerFromCall && typeof recentWinnerFromCall === "string") {
-        setRecentWinner(recentWinnerFromCall);
-        console.log(recentWinner);
-      } else {
-        setRecentWinner(null);
+        if (recentWinnerFromCall && typeof recentWinnerFromCall === "string") {
+          setRecentWinner(recentWinnerFromCall);
+          console.log(recentWinner);
+        } else {
+          setRecentWinner(null);
+        }
+      } catch (error) {
+        console.error("Error updating UI:", error);
       }
-    } catch (error) {
-      console.error("Error updating UI:", error);
-    }
-  }, []);
+    },
+    [entranceFee, numPlayers, recentWinner]
+  );
 
   // console.log(raffleAddress);
   useEffect(() => {
