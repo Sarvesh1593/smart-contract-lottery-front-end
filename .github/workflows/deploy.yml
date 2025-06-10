@@ -24,9 +24,10 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Upload to Pinata
+      - name: Upload Next.js static site to Pinata
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.2
         with:
           path: out
           pinata-api-key: ${{ secrets.PINATA_API_KEY }}
           pinata-secret-api-key: ${{ secrets.PINATA_SECRET_API_KEY }}
+          pin-name: "smart-lottery-frontend"
